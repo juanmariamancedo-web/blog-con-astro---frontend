@@ -1,0 +1,37 @@
+---
+import Header from "../components/Header/Header"
+import Footer from "../components/Footer.astro"
+import { ViewTransitions } from "astro:transitions"
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { description, title } = Astro.props
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+
+    <title>{title}</title>
+
+    <ViewTransitions />
+  </head>
+  <body class={`text-base md:text-lg overflow-x-hidden`}>
+    <div class='min-h-screen flex flex-col justify-between dark:text-white   bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-900 dark:to-blue-900'>
+      <Header client:load />
+        <div class='pt-14'>
+            <slot />
+        </div>
+      <Footer />
+    </div>
+  </body>  
+</html>

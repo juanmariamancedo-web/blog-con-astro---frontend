@@ -1,0 +1,17 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro"
+import type { GetStaticPaths } from "astro";
+
+
+const {id} = Astro.params
+
+export const getStaticPaths = (() => {
+    
+    return [
+        {params: {id: "22"}}
+    ];
+}) satisfies GetStaticPaths;
+---
+<MainLayout title="Post" description="">
+    {id}
+</MainLayout>
