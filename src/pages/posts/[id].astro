@@ -1,17 +1,47 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro"
-import type { GetStaticPaths } from "astro";
+import Post from "../../components/Post.astro"
+import type { Welcome } from "../../models/posts"
 
+import type { GetStaticPaths } from "astro";
+const API_URL = import.meta.env.PUBLIC_API_URL
 
 const {id} = Astro.params
 
-export const getStaticPaths = (() => {
+var post = await fetch(`${API_URL}/api/posts?filters[slug][$eq]=${id}&populate=cover`) 
+
+const postJson = await post.json() as Welcome
+
+
+export const getStaticPaths = (async() => {
+    const API_URL = import.meta.env.PUBLIC_API_URL
     
-    return [
-        {params: {id: "22"}}
-    ];
+    async function obtainPosts(page:number): Promise<Welcome>{
+        const postsParcials = await fetch(`${API_URL}/api/posts?fields[0]=slug&pagination[page]=${page}&pagination[pageSize]=2`) 
+        return postsParcials.json()
+    }
+    
+    let page = 1
+
+    const posts = await obtainPosts(page)
+
+    const totalPages = posts.meta.pagination.total
+
+    var postsJson = posts.data
+    
+    while(page < totalPages){ 
+        ++page
+
+        const postsParcials = await obtainPosts(page)
+        
+        postsJson = [...postsJson, ...postsParcials.data]
+    }
+
+    return postsJson.map((post)=>{
+        return({params: {id: post.attributes.slug}})
+    })
 }) satisfies GetStaticPaths;
 ---
 <MainLayout title="Post" description="">
-    {id}
+    <Post  post={postJson.data[0]} />     
 </MainLayout>

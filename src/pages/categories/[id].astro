@@ -1,0 +1,64 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import type { Welcome } from "../../models/categoriesAndTags";
+import PaginationPosts from "../../components/posts/PaginationPosts";
+import type { Datum } from "../../models/posts";
+import Search from "../../components/posts/Search";
+import createSearchPost from "../../utils/createSearchPost";
+
+const API_URL = import.meta.env.PUBLIC_API_URL
+
+const {id} = Astro.params
+
+export const getStaticPaths = (async() => {
+    const API_URL = import.meta.env.PUBLIC_API_URL
+
+    async function obtainCategories(page: number): Promise<Welcome>{
+        const categories = await fetch(`${API_URL}/api/categories?pagination[page]=${page}&pagination[pageSize]=2&populate=posts`)
+        return await categories.json()
+    }
+
+    let page = 1
+
+    const categories = await obtainCategories(page)
+
+    const totalPages = categories.meta.pagination.total
+
+    var categoriesJson = categories.data
+
+    while(page < totalPages){ 
+        ++page
+
+        const categoriesParcials = await obtainCategories(page)
+        
+        categoriesJson = [...categoriesJson, ...categoriesParcials.data]
+    }
+
+    const filtercategories = categoriesJson.filter((category)=>{
+        if(category.attributes.posts.data[0]) return category
+    })
+
+    return filtercategories.map((category)=>{
+        return ({params: {id: category.attributes.slug}})
+    })
+}) satisfies GetStaticPaths;
+
+const categoriesRaw = await fetch(`${API_URL}/api/categories?populate=posts&populate=posts.cover&populate=posts.category&populate=posts.tags&slug=${id}`)
+const categories = await categoriesRaw.json() as Welcome
+
+const posts = categories.data.map(category=> category.attributes.posts.data[0])
+
+const postsToSearch = posts.filter((elemento): elemento is Datum => elemento !== undefined).map((post)=>{
+    return createSearchPost(post)
+})
+---
+
+<MainLayout title="" description="">
+    <section class="flex flex-col justify-center items-center">
+        <div class="container p-3 flex justify-start">
+            <Search posts={postsToSearch} client:load />
+        </div>
+        <PaginationPosts query={categories.data.map(category=> category.attributes.posts.data[0]).filter((elemento): elemento is Datum => elemento !== undefined)} client:load/>
+    </section>
+</MainLayout>../../models/categoriesAndTags

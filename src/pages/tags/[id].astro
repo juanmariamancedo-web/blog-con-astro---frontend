@@ -1,0 +1,64 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import type { Welcome } from "../../models/categoriesAndTags";
+import PaginationPosts from "../../components/posts/PaginationPosts";
+import type { Datum } from "../../models/posts";
+import Search from "../../components/posts/Search";
+import createSearchPost from "../../utils/createSearchPost";
+
+const API_URL = import.meta.env.PUBLIC_API_URL
+
+const {id} = Astro.params
+
+export const getStaticPaths = (async() => {
+    const API_URL = import.meta.env.PUBLIC_API_URL
+
+    async function obtainTags(page: number): Promise<Welcome>{
+        const tags = await fetch(`${API_URL}/api/tags?pagination[page]=${page}&pagination[pageSize]=2&populate=posts`)
+        return await tags.json()
+    }
+
+    let page = 1
+
+    const tags = await obtainTags(page)
+
+    const totalPages = tags.meta.pagination.total
+
+    var tagsJson = tags.data
+
+    while(page < totalPages){ 
+        ++page
+
+        const tagsParcials = await obtainTags(page)
+        
+        tagsJson = [...tagsJson, ...tagsParcials.data]
+    }
+
+    const filterTags = tagsJson.filter((tag)=>{
+        if(tag.attributes.posts.data[0]) return tag
+    })
+
+    return filterTags.map((tag)=>{
+        return ({params: {id: tag.attributes.slug}})
+    })
+}) satisfies GetStaticPaths;
+
+const tagsRaw = await fetch(`${API_URL}/api/tags?populate=posts&populate=posts.cover&populate=posts.category&populate=posts.tags&slug=${id}`)
+const tags = await tagsRaw.json() as Welcome
+
+const posts = tags.data.map(tag=> tag.attributes.posts.data[0])
+
+const postsToSearch = posts.filter((elemento): elemento is Datum => elemento !== undefined).map((post)=>{
+    return createSearchPost(post)
+})
+---
+
+<MainLayout title="" description="">
+    <section class="flex flex-col justify-center items-center">
+        <div class="container p-3 flex justify-start">
+            <Search posts={postsToSearch} client:load />
+        </div>
+        <PaginationPosts query={tags.data.map(tags=> tags.attributes.posts.data[0]).filter((elemento): elemento is Datum => elemento !== undefined) as Datum[]} client:load/>
+    </section>
+</MainLayout>

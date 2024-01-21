@@ -1,7 +1,15 @@
 ---
+import { type Welcome } from "../models/posts"
+
 import MainLayout from "../layouts/MainLayout.astro"
 import Main from "../components/Main.astro"
+import Posts from "../components/posts/Posts.tsx"
 
+const API_URL = import.meta.env.PUBLIC_API_URL
+
+const postsRaw = await fetch(`${API_URL}/api/posts?pagination[pageSize]=6&populate=cover`)
+
+const posts = await postsRaw.json() as Welcome
 ---
 
 <MainLayout title="Home" description="">
@@ -9,7 +17,7 @@ import Main from "../components/Main.astro"
       <Main />
       <section>
         <div class='container mx-auto px-3 py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-			<!-- <Posts docs={res.docs}/> -->
+			<Posts query={posts.data} />
 			<div class="col-span-full flex justify-center">
 				<a href="/posts?page=1" class='basis-full md:basis-1/3 grow-0 py-1 px-3 text-center bg-yellow-400 text-black dark:bg-white dark:text-black rounded-xl shadow-sm shadow-slate-200 dark:shadow-white'>
 					Ver más posts
@@ -20,3 +28,4 @@ import Main from "../components/Main.astro"
     </div>
 </MainLayout>
 
+../components/posts/Posts.tsx

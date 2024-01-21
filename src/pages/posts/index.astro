@@ -1,0 +1,43 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro"
+import type { Welcome } from "../../models/posts"
+import PaginationPosts from "../../components/posts/PaginationPosts"
+import createSearchPost from "../../utils/createSearchPost"
+import Search from "../../components/posts/Search"
+
+const API_URL = import.meta.env.PUBLIC_API_URL
+    
+async function obtainPosts(page:number): Promise<Welcome>{
+    const postsParcials = await fetch(`${API_URL}/api/posts?populate=cover&populate=tags&populate=category&pagination[page]=${page}&pagination[pageSize]=2`) 
+    return postsParcials.json()
+}
+
+let page = 1
+
+const posts = await obtainPosts(page)
+
+const totalPages = posts.meta.pagination.total
+
+var postsArray = posts.data
+
+while(page < totalPages){ 
+    ++page
+
+    const postsParcials = await obtainPosts(page)
+    
+    postsArray = [...postsArray, ...postsParcials.data]
+}
+
+const postToUpdate = postsArray.map((post)=>{
+    return createSearchPost(post)
+})
+---
+
+<MainLayout title="" description="">
+    <section class="flex flex-col justify-center items-center">
+        <div class="container p-3 flex justify-start">
+            <Search posts={postToUpdate} client:load />
+        </div>
+        <PaginationPosts query={postsArray} client:load/>
+    </section>
+</MainLayout>
