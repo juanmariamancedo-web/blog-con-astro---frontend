@@ -4,5 +4,6 @@ export type CategoryAndTagMapping = {
     id: number,
     title: string,
     slug: string,
-    post: PostMapping
+    post: PostMapping,
+    numberOfPosts:  number
 }

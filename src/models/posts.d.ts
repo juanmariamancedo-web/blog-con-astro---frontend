@@ -26,8 +26,8 @@ export interface PurpleAttributes {
     publishedAt: Date;
     slug:        string;
     cover:       Cover;
-    tags:        Tags;
     category:    Category;
+    tags:        Tags;
 }
 
 export interface Category {
@@ -44,6 +44,7 @@ export interface FluffyAttributes {
     createdAt:   Date;
     updatedAt:   Date;
     publishedAt: Date;
+    slug:        string;
 }
 
 export interface Cover {
@@ -289,8 +290,8 @@ const typeMap: any = {
         { json: "publishedAt", js: "publishedAt", typ: Date },
         { json: "slug", js: "slug", typ: "" },
         { json: "cover", js: "cover", typ: r("Cover") },
-        { json: "tags", js: "tags", typ: r("Tags") },
         { json: "category", js: "category", typ: r("Category") },
+        { json: "tags", js: "tags", typ: r("Tags") },
     ], false),
     "Category": o([
         { json: "data", js: "data", typ: u(r("DAT"), null) },
@@ -304,6 +305,7 @@ const typeMap: any = {
         { json: "createdAt", js: "createdAt", typ: Date },
         { json: "updatedAt", js: "updatedAt", typ: Date },
         { json: "publishedAt", js: "publishedAt", typ: Date },
+        { json: "slug", js: "slug", typ: "" },
     ], false),
     "Cover": o([
         { json: "data", js: "data", typ: r("Data") },

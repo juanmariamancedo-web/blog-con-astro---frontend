@@ -1,5 +1,6 @@
 const API_URL = import.meta.env.PUBLIC_API_URL
 import type { CategoryAndTagMapping } from "../../../models/categoryAndTagMapping"
+import { Badge } from "flowbite-react"
 
 export default function Categories({categories}: {categories: CategoryAndTagMapping[]}){
     if(categories.length > 0) return(
@@ -15,6 +16,7 @@ export default function Categories({categories}: {categories: CategoryAndTagMapp
                     </a>
                     <div className='p-3 grow flex flex-col justify-between items-center gap-3'>
                         <h2 className='text-slate-900 dark:text-white text-2xl px-3'>{category.title}</h2>
+                        <Badge color="gray">{category.numberOfPosts} {category.numberOfPosts == 1? "post" : "posts"}</Badge>
                         <a href={`/categories/${category.slug}`} className="py-1 px-3 text-center bg-yellow-400 text-black dark:bg-white dark:text-black rounded-xl shadow-sm shadow-slate-200 dark:shadow-white">
                             Ver más
                         </a>

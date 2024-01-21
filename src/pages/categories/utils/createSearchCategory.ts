@@ -1,5 +1,5 @@
 import type { Datum } from "../../../models/categoriesAndTags";
-import type { CategoryMapping } from "../../../models/categoryAndTagMapping";
+import type { CategoryAndTagMapping } from "../../../models/categoryAndTagMapping";
 import type { Welcome } from "../../../models/post"
 
 const API_URL = import.meta.env.PUBLIC_API_URL
@@ -10,7 +10,7 @@ async function obtainLastPostOfCategory(id: number): Promise<Welcome>{
     return await post.json()
 }
 
-export default async function createSearchCategory(category: Datum): Promise<CategoryMapping | undefined> {
+export default async function createSearchCategory(category: Datum): Promise<CategoryAndTagMapping | undefined> {
     if(!category || category.attributes.posts.data.length == 0) return undefined
 
     const post = await obtainLastPostOfCategory(category.attributes.posts.data[0].id)
@@ -21,6 +21,7 @@ export default async function createSearchCategory(category: Datum): Promise<Cat
         id: category.id,
         title: category.attributes.Title,
         slug: category.attributes.slug,
+        numberOfPosts: category.attributes.posts.data.length,
         post: {
             id: post.data.id,
             title: post.data.attributes.title,

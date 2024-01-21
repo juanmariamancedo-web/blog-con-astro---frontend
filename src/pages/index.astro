@@ -7,7 +7,7 @@ import Posts from "../components/posts/Posts.tsx"
 
 const API_URL = import.meta.env.PUBLIC_API_URL
 
-const postsRaw = await fetch(`${API_URL}/api/posts?pagination[pageSize]=6&populate=cover`)
+const postsRaw = await fetch(`${API_URL}/api/posts?pagination[pageSize]=6&populate=cover&populate=category&populate=tags`)
 
 const posts = await postsRaw.json() as Welcome
 ---

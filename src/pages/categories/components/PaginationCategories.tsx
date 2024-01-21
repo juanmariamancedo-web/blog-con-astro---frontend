@@ -1,14 +1,13 @@
 import Finish from "../../../components/posts/Finish"
 import Categories from "./Categories"
-import type { CategoryMapping } from "../../../models/categoryAndTagMapping"
+import type { CategoryAndTagMapping } from "../../../models/categoryAndTagMapping"
 import { useState, useEffect } from "react"
 import usePagination from "../../../hooks/usePagination"
 
-export default function PaginationCategories({categories}: {categories: CategoryMapping[]}){
+export default function PaginationCategories({categories}: {categories: CategoryAndTagMapping[]}){
     const [querySlice, setQuerySlice] = useState(categories.slice(0, 6))
     const [situation, page, final] = usePagination(querySlice.length)
 
-    console.log(querySlice)
     useEffect(()=>{
         setQuerySlice(categories.slice((page - 1) * 6, (page - 1) * 6 + 6))
     }, [page])
