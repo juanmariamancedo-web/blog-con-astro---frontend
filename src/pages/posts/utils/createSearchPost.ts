@@ -1,5 +1,5 @@
-import type { PostMapping } from "../models/postMapping"
-import type { Datum } from "../models/posts"
+import type { PostMapping } from "../../../models/postMapping"
+import type { Datum } from "../../../models/posts"
 
 export default function createSearchPost(post: Datum): PostMapping{
     return({
