@@ -1,33 +1,32 @@
-import type { Datum } from "../../../models/categoriesAndTags";
-import type { CategoryAndTagMapping } from "../../../models/categoryAndTagMapping";
-import type { Welcome } from "../../../models/post"
+import type { Datum } from "../../models/categoriesAndTags"
+import type { Welcome } from "../../models/post"
+import type { CategoryAndTagMapping } from "../../models/categoryAndTagMapping"
 
 const API_URL = import.meta.env.PUBLIC_API_URL
 
-async function obtainLastPostOfCategory(id: number): Promise<Welcome>{
-    console.log(`Ruta a fecth ${API_URL}/api/posts/${id}?populate=cover`)
+async function obtainLastPostOfDoc(id: number): Promise<Welcome>{
     let post = await fetch(`${API_URL}/api/posts/${id}?populate=cover`)
     return await post.json()
 }
 
-export default async function createSearchCategory(category: Datum): Promise<CategoryAndTagMapping | undefined> {
-    if(!category || category.attributes.posts.data.length == 0) return undefined
-
-    const post = await obtainLastPostOfCategory(category.attributes.posts.data[0].id)
+export default async function createSearchtag(doc: Datum): Promise<CategoryAndTagMapping | undefined> {
+    if(!doc || doc.attributes.posts.data.length == 0) return undefined
+    
+    const post = await obtainLastPostOfDoc(doc.attributes.posts.data[0].id)
 
     if(!post.data) return undefined
 
     return({
-        id: category.id,
-        title: category.attributes.Title,
-        slug: category.attributes.slug,
-        numberOfPosts: category.attributes.posts.data.length,
+        id: doc.id,
+        title: doc.attributes.Title,
+        slug: doc.attributes.slug,
+        numberOfPosts: doc.attributes.posts.data.length,
         post: {
             id: post.data.id,
             title: post.data.attributes.title,
             description: post.data.attributes.description,
-            category: undefined,
             tags: [],
+            category: undefined,
             slug: post.data.attributes.slug,
             image: {
                 id: post.data.attributes.cover.data.id,

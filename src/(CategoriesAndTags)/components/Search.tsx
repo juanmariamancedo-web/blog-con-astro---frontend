@@ -1,18 +1,18 @@
-import type { TagMapping } from "../../../models/tagMapping"
+import type { CategoryAndTagMapping } from "../../models/categoryAndTagMapping"
 import Fuse from "fuse.js"
 import type { FuseResult } from "fuse.js"
 import { useState } from "react"
 const API_URL = import.meta.env.PUBLIC_API_URL
 import { ListGroup } from 'flowbite-react';
 
-export default function Search({tags}: {tags: TagMapping[]}){
+export default function Search({docs, slug}: {docs: CategoryAndTagMapping[], slug: string}){
     const [search, setSearch] = useState("")
-    const [fuse, setFuse] = useState<FuseResult<TagMapping>[]>()
+    const [fuse, setFuse] = useState<FuseResult<CategoryAndTagMapping>[]>()
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault()
 
-        const fuse = new Fuse(tags, {
+        const fuse = new Fuse(docs, {
             keys: [
                 {
                     name: "title"
@@ -43,7 +43,7 @@ export default function Search({tags}: {tags: TagMapping[]}){
                     <ListGroup className="absolute inset-x-0 flex flex-col gap-2 dark:bg-slate-800 dark:text-white">
                         {fuse.map(result => (
                             <ListGroup.Item className=" inset-x-0 border-collapse border-amber-50 dark:border-gray-600 border-2" key={`result-${result.item.id}`}>
-                                <a href={`/tags/`} className="flex gap-2 justify-between w-full">
+                                <a href={`${slug}/${result.item.slug}`} className="flex gap-2 justify-between w-full">
                                     <div className="flex justify-center items-center gap-2 basis-2/3">
                                         <p>
                                             {result.item.title}

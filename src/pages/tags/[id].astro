@@ -6,6 +6,7 @@ import PaginationPosts from "../../components/posts/PaginationPosts";
 import type { Datum } from "../../models/posts";
 import Search from "../../components/posts/Search";
 import createSearchPost from "../../utils/createSearchPost";
+import makeFilterDocs from "../../(CategoriesAndTags)/utils/makeFilterDocs";
 
 const API_URL = import.meta.env.PUBLIC_API_URL
 
@@ -19,25 +20,7 @@ export const getStaticPaths = (async() => {
         return await tags.json()
     }
 
-    let page = 1
-
-    const tags = await obtainTags(page)
-
-    const totalPages = tags.meta.pagination.total
-
-    var tagsJson = tags.data
-
-    while(page < totalPages){ 
-        ++page
-
-        const tagsParcials = await obtainTags(page)
-        
-        tagsJson = [...tagsJson, ...tagsParcials.data]
-    }
-
-    const filterTags = tagsJson.filter((tag)=>{
-        if(tag.attributes.posts.data[0]) return tag
-    })
+    const filterTags = await makeFilterDocs(obtainTags)
 
     return filterTags.map((tag)=>{
         return ({params: {id: tag.attributes.slug}})

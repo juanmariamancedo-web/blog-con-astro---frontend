@@ -6,38 +6,20 @@ import PaginationPosts from "../../components/posts/PaginationPosts";
 import type { Datum } from "../../models/posts";
 import Search from "../../components/posts/Search";
 import createSearchPost from "../../utils/createSearchPost";
+import makeFiltersDocs from "../../(CategoriesAndTags)/utils/makeFilterDocs"
 
 const API_URL = import.meta.env.PUBLIC_API_URL
 
 const {id} = Astro.params
 
 export const getStaticPaths = (async() => {
-    const API_URL = import.meta.env.PUBLIC_API_URL
-
     async function obtainCategories(page: number): Promise<Welcome>{
+        const API_URL = import.meta.env.PUBLIC_API_URL
         const categories = await fetch(`${API_URL}/api/categories?pagination[page]=${page}&pagination[pageSize]=2&populate=posts`)
         return await categories.json()
     }
 
-    let page = 1
-
-    const categories = await obtainCategories(page)
-
-    const totalPages = categories.meta.pagination.total
-
-    var categoriesJson = categories.data
-
-    while(page < totalPages){ 
-        ++page
-
-        const categoriesParcials = await obtainCategories(page)
-        
-        categoriesJson = [...categoriesJson, ...categoriesParcials.data]
-    }
-
-    const filtercategories = categoriesJson.filter((category)=>{
-        if(category.attributes.posts.data[0]) return category
-    })
+    const filtercategories = await makeFiltersDocs(obtainCategories)
 
     return filtercategories.map((category)=>{
         return ({params: {id: category.attributes.slug}})
@@ -61,4 +43,4 @@ const postsToSearch = posts.filter((elemento): elemento is Datum => elemento !==
         </div>
         <PaginationPosts query={categories.data.map(category=> category.attributes.posts.data[0]).filter((elemento): elemento is Datum => elemento !== undefined)} client:load/>
     </section>
-</MainLayout>../../models/categoriesAndTags
+</MainLayout>

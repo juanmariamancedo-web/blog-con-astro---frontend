@@ -1,10 +1,9 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro"
-import PaginationTags from "./components/PaginationTags"
-import Search from "./components/Search"
-import createSearchtag from "./utils/createSearchTag"
+import Search from "../../(CategoriesAndTags)/components/Search"
+import PaginationCategoriesAndTags from "../../(CategoriesAndTags)/components/PaginationCategoriesAndTags"
 import type { Welcome}  from "../../models/categoriesAndTags"
-import type { CategoryAndTagMapping } from "../../models/categoryAndTagMapping"
+import makeDocs from "../../(CategoriesAndTags)/utils/makeDocs"
 
 const API_URL = import.meta.env.PUBLIC_API_URL
     
@@ -13,35 +12,17 @@ async function obtainTags(page:number): Promise<Welcome>{
     return postsParcials.json()
 }
 
-let page = 1
+const tagsToUpdate = await makeDocs(obtainTags)
 
-const categories = await obtainTags(page)
-
-const totalPages = categories.meta.pagination.total
-
-var categoriesArray = categories.data
-
-while(page < totalPages){ 
-    ++page
-    
-    const categoriesParcials = await obtainTags(page)
-    
-    categoriesArray = [...categoriesArray, ...categoriesParcials.data]
-}
-
-const categoriesToUpdateRaw = await Promise.all(categoriesArray.map(async(category)=>{
-    return await createSearchtag(category);
-}))
-
-const categoriesToUpdate = categoriesToUpdateRaw.filter((elemento): elemento is CategoryAndTagMapping => elemento !== undefined)
+console.log(tagsToUpdate)
 
 ---
 
 <MainLayout title="" description="">
     <section class="flex flex-col justify-center items-center">
         <div class="container p-3 flex justify-start">
-            <Search client:load tags={categoriesToUpdate} />
+            <Search slug="/tags" client:load docs={tagsToUpdate} />
         </div> 
-        <PaginationTags tags={categoriesToUpdate} client:load/>
+        <PaginationCategoriesAndTags slug="/tags" docs={tagsToUpdate} client:load/>
     </section>
 </MainLayout>

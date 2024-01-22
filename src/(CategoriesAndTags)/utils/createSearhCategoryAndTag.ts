@@ -1,16 +1,11 @@
-import type { Datum } from "../../../models/tags"
-import type { Welcome } from "../../../models/posts"
-import type { TagMapping } from "../../../models/tagMapping"
+import type { Datum } from "../../models/categoriesAndTags"
+import type { Welcome } from "../../models/posts"
+import type { CategoryAndTagMapping } from "../../models/categoryAndTagMapping"
 
-const API_URL = import.meta.env.PUBLIC_API_URL
-
-async function obtainLastPostOfTag(id: number): Promise<Welcome>{
-    let post = await fetch(`${API_URL}/api/posts?tags.id=${id}&pagination[pageSize]=1&populate=cover`)
-    return await post.json()
-}
-
-export default async function createSearchtag(tag: Datum): Promise<TagMapping | undefined> {
-    const post = await obtainLastPostOfTag(tag.id)
+export default async function createSearchtag(tag: Datum, obtainLastPostOfDoc: (id: number) => Promise<Welcome>): Promise<CategoryAndTagMapping | undefined> {
+    if(!tag || tag.attributes.posts.data.length == 0) return undefined
+    
+    const post = await obtainLastPostOfDoc(tag.attributes.posts.data[0].id)
 
     if(!post.data[0]) return undefined
 
@@ -18,6 +13,7 @@ export default async function createSearchtag(tag: Datum): Promise<TagMapping | 
         id: tag.id,
         title: tag.attributes.Title,
         slug: tag.attributes.slug,
+        numberOfPosts: post.data.length,
         post: {
             id: post.data[0].id,
             title: post.data[0].attributes.title,
