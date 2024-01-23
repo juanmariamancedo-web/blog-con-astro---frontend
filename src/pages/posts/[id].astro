@@ -42,6 +42,6 @@ export const getStaticPaths = (async() => {
     })
 }) satisfies GetStaticPaths;
 ---
-<MainLayout title="Post" description="">
+<MainLayout title={postJson.data[0].attributes.title} description={postJson.data[0].attributes.description}>
     <Post  post={postJson.data[0]} />     
 </MainLayout>

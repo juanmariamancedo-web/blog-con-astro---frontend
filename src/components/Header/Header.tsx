@@ -36,6 +36,20 @@ export default function Header(){
                         <ul className="flex flex-col items-center">
                             <li>
                                 <SwitchOpen setOpen={setOpen}>
+                                    <a href="/tags?" onClick={handleClick} className="text-5xl md:text-8xl">
+                                        Tags
+                                    </a>
+                                </SwitchOpen>
+                            </li>
+                            <li>
+                                <SwitchOpen setOpen={setOpen}>
+                                    <a href="/posts?" onClick={handleClick} className="text-5xl md:text-8xl">
+                                        Posts
+                                    </a>
+                                </SwitchOpen>
+                            </li>
+                            <li>
+                                <SwitchOpen setOpen={setOpen}>
                                     <a href="/" onClick={handleClick} className="text-5xl md:text-8xl">
                                         Home
                                     </a>
@@ -50,8 +64,8 @@ export default function Header(){
                             </li>
                             <li>
                                 <SwitchOpen setOpen={setOpen}>
-                                    <a href="/posts?posts=1" onClick={handleClick} className="text-5xl md:text-8xl">
-                                        Posts
+                                    <a href="/categories?" onClick={handleClick} className="text-5xl md:text-8xl">
+                                        Categories
                                     </a>
                                 </SwitchOpen>
                             </li>

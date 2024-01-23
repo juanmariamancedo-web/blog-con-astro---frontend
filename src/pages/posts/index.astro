@@ -2,7 +2,7 @@
 import MainLayout from "../../layouts/MainLayout.astro"
 import type { Welcome } from "../../models/posts"
 import PaginationPosts from "../../components/posts/PaginationPosts"
-import createSearchPost from "./utils/createSearchPost"
+import createSearchPost from "../../utils/createSearchPost"
 import Search from "../../components/posts/Search"
 
 const API_URL = import.meta.env.PUBLIC_API_URL
@@ -33,7 +33,7 @@ const postToUpdate = postsArray.map((post)=>{
 })
 ---
 
-<MainLayout title="" description="">
+<MainLayout title="Posts">
     <section class="flex flex-col justify-center items-center">
         <div class="container p-3 flex justify-start">
             <Search posts={postToUpdate} client:load />

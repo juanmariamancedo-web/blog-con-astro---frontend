@@ -4,8 +4,8 @@ import Footer from "../components/Footer.astro"
 import { ViewTransitions } from "astro:transitions"
 
 interface Props {
-  title: string
-  description: string
+  title: string | undefined
+  description?: string
 }
 
 const { description, title } = Astro.props
@@ -15,13 +15,12 @@ const { description, title } = Astro.props
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
+    <meta name="description" content={description? description: `Contrata a Juan María Mancedo para crear tu aplicación web. Desarrollador Web junior. Especializado en crear páginas webs únicas..`} />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-
-    <title>{title}</title>
+    <title>{title? `JM | ${title}` : `JM`}</title>
 
     <ViewTransitions />
   </head>

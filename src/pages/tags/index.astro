@@ -13,12 +13,9 @@ async function obtainTags(page:number): Promise<Welcome>{
 }
 
 const tagsToUpdate = await makeDocs(obtainTags)
-
-console.log(tagsToUpdate)
-
 ---
 
-<MainLayout title="" description="">
+<MainLayout title="Tags">
     <section class="flex flex-col justify-center items-center">
         <div class="container p-3 flex justify-start">
             <Search slug="/tags" client:load docs={tagsToUpdate} />

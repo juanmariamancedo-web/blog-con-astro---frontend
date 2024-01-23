@@ -14,7 +14,7 @@ async function obtainCategories(page:number): Promise<Welcome>{
 const categoriesToUpdate = await makeDocs(obtainCategories)
 ---
 
-<MainLayout title="" description="">
+<MainLayout title="Categories">
     <section class="flex flex-col justify-center items-center">
         <div class="container p-3 flex justify-start">
             <Search slug="/categories" docs={categoriesToUpdate} client:load />

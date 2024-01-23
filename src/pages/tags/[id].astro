@@ -37,7 +37,7 @@ const postsToSearch = posts.filter((elemento): elemento is Datum => elemento !==
 })
 ---
 
-<MainLayout title="" description="">
+<MainLayout title={tags.data[0].attributes.Title}>
     <section class="flex flex-col justify-center items-center">
         <div class="container p-3 flex justify-start">
             <Search posts={postsToSearch} client:load />

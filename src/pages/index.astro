@@ -12,14 +12,14 @@ const postsRaw = await fetch(`${API_URL}/api/posts?pagination[pageSize]=6&popula
 const posts = await postsRaw.json() as Welcome
 ---
 
-<MainLayout title="Home" description="">
+<MainLayout title="Home">
 	<div>
       <Main />
       <section>
         <div class='container mx-auto px-3 py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
 			<Posts query={posts.data} />
 			<div class="col-span-full flex justify-center">
-				<a href="/posts?page=1" class='basis-full md:basis-1/3 grow-0 py-1 px-3 text-center bg-yellow-400 text-black dark:bg-white dark:text-black rounded-xl shadow-sm shadow-slate-200 dark:shadow-white'>
+				<a href="/posts" class='basis-full md:basis-1/3 grow-0 py-1 px-3 text-center bg-yellow-400 text-black dark:bg-white dark:text-black rounded-xl shadow-sm shadow-slate-200 dark:shadow-white'>
 					Ver más posts
 				</a>
 			</div>
@@ -27,5 +27,3 @@ const posts = await postsRaw.json() as Welcome
       </section>
     </div>
 </MainLayout>
-
-../components/posts/Posts.tsx
