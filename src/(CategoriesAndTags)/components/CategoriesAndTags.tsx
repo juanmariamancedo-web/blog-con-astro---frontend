@@ -8,7 +8,7 @@ export default function CategoriesAndTags({docs, slug}: {docs: CategoryAndTagMap
             {docs.map((doc)=>(
                 <article key={doc.id} className=" bg-white border-slate-800 dark:bg-slate-800 dark:border-white border-4 rounded-xl shadow-xl flex flex-col items-center justify-between gap-3">
                     <a href={`${slug}/${doc.slug}`}>
-                            <img src={`${API_URL}${doc.post.image.src}`}
+                            <img src={`${doc.post.image.src}`}
                                 width={doc.post.image.width}
                                 height={doc.post.image.height}
                                 alt={doc.post.image.alt || ""}

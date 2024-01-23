@@ -10,7 +10,7 @@ export default function Posts({query} : {query: Datum[]}) {
                 return (
                     <article key={post.id} className=" bg-white border-slate-800 dark:bg-slate-800 dark:border-white border-4 rounded-xl shadow-xl flex flex-col items-center justify-between gap-3">
                         <a href={`/posts/${post.attributes.slug}`}>
-                                <img src={`${API_URL}${post.attributes.cover.data.attributes.url}`}
+                                <img src={`${post.attributes.cover.data.attributes.url}`}
                                     width={post.attributes.cover.data.attributes.width}
                                     height={post.attributes.cover.data.attributes.height}
                                     alt={post.attributes.cover.data.attributes.alternativeText || ""}
