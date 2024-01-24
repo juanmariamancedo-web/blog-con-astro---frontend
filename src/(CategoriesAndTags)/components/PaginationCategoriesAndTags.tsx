@@ -1,7 +1,7 @@
 import Finish from "../../components/posts/Finish"
 import CategoriesAndTags from "./CategoriesAndTags"
 import type { CategoryAndTagMapping } from "../../models/categoryAndTagMapping"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect} from "react"
 import usePagination from "../../hooks/usePagination"
 
 export default function PaginationCategoriesAndTags({docs, slug}: {docs: CategoryAndTagMapping[], slug: string}){

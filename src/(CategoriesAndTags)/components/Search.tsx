@@ -50,7 +50,7 @@ export default function Search({docs, slug}: {docs: CategoryAndTagMapping[], slu
                                         </p>
                                     </div>
                                     <div className="basis-1/3 flex justify-center items-center">
-                                        <img src={`${API_URL}${result.item.post.image.src}`} alt={result.item.post.image.alt} className="aspect-video" />
+                                        <img src={`${result.item.post.image.src}`} alt={result.item.post.image.alt} className="aspect-video" />
                                     </div>
                                 </a>
                             </ListGroup.Item>
