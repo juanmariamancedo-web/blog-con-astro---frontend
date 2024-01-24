@@ -1,10 +1,11 @@
 import {useState, useEffect, useRef} from "react"
+import type { MutableRefObject } from "react"
 
-export default function  usePagination(length: number): ["loading" | "there are not posts" | "finish", number, React.MutableRefObject<Element | undefined>] {
+export default function  usePagination(length: number): ["loading" | "there are not posts" | "finish", number, MutableRefObject<HTMLDivElement | null>] {
     const [page, setPage] = useState(1)
     const [situation, setSituation] = useState<"loading" | "there are not posts" | "finish">("loading")
 
-    const final = useRef<Element>();
+    const final = useRef<HTMLDivElement>(null);
 
     useEffect(()=>{ 
         if(length > 0) {

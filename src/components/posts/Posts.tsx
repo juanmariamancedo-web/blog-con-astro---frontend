@@ -1,4 +1,3 @@
-const API_URL = import.meta.env.PUBLIC_API_URL
 import type { Datum } from "../../models/posts";
 import { Badge } from "flowbite-react";
 

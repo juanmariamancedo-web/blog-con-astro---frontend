@@ -1,5 +1,5 @@
 import type { CategoryAndTagMapping } from "../../models/categoryAndTagMapping"
-import type {Welcome, Datum} from "../../models/categoriesAndTags"
+import type {Welcome} from "../../models/categoriesAndTags"
 import createSearchCategoryAndTag from "./createSearchCategoryAndTag"
 
 export default async function makeDocs(obtainDocs: (page: number)=> Promise<Welcome>): Promise<CategoryAndTagMapping[]>{
